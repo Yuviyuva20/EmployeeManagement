@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+</head>
+<body>
+<form class="form-control mb=4 w=25">
+    <input type="hidden" name="id" id="id">
+   EMPLOYEE NAME: <input type="text" name="name" id="name" class="form-control mb=4 w=25 "><br>
+    ADDRESS LINE 1:<input type="text" name="address1" id="address1" class="form-control mb=4 w=150"><br>
+    ADDRESS LINE 2:<input type="text" name="address2" id="address2" class="form-control mb=4 w=150"><br>
+   CITY: <input type="text" name="city" id="city" class="form-control mb=4 w=150"><br>
+   ZIPCODE: <input type="text" name="zip" id="zip" class="form-control mb=4 w=150"><br>
+    <input class="btn btn-outline-success" type="button" value="Save" onclick="validateAndSave()">
+    <input class="btn btn-outline-primary" type="button" value="Back" onclick="back()">
+</form>
+<script>
+    function validateAndSave() {
+        var name = $('#name').val()
+        var address1 = $('#address1').val()
+        var address2 = $('#address2').val()
+        var city = $('#city').val()
+        var zip = $('#zip').val()
+
+        if(name === ''){
+            alert("Please enter a name")
+            return;
+        }
+
+        if(address1 === ''){
+            alert("Please enter a address Line 1")
+            return;
+        }
+        if(address2 === ''){
+            alert("Please enter a address Line 2")
+            return;
+        }
+        if(city === ''){
+            alert("Please enter a City")
+            return;
+        }
+
+        var code = /^[0-9]{6}$/;
+        if(!code.test(zip) || zip === ''){
+            alert("Please enter a valid zipcode contains only 6(numeric)")
+            return;
+        }
+        save()
+    }
+
+    function save(){
+        $.ajax({
+            url:"http://localhost:8080/employee/save",
+            type:"POST",
+            contentType:"application/json",
+            data:JSON.stringify({
+                employeeNumber: $('#id').val(),
+                employeeName: $('#name').val(),
+            addressLine1:  $('#address1').val(),
+                addressLine2: $('#address2').val(),
+            city: $('#city').val(),
+                zipCode: $('#zip').val()}),
+            success:function (){
+                alert("Saved Successfully")
+                back()
+            }
+        })
+    }
+
+    function back(){
+        window.location.href="employee-list.html"
+    }
+
+</script>
+
+
+</body>
+</html>
